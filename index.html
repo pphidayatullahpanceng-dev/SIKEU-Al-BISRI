@@ -16,19 +16,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <!-- FIREBASE SDK V10 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            deleteDoc, 
-            collection, 
-            onSnapshot 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         const firebaseConfig = {
             apiKey: "AIzaSyCbp44S6An1AI_gt40ht6UQTzjXqSNmDwI",
             authDomain: "sikeu-pph-panceng.firebaseapp.com",
@@ -42,8 +33,7 @@
         window.db = getFirestore(app);
         window.fireDoc = doc;
         window.fireSetDoc = setDoc;
-        window.fireDeleteDoc = deleteDoc;
-        window.fireCollection = collection;
+        window.fireGetDoc = getDoc;
         window.fireOnSnapshot = onSnapshot;
     </script>
     <script>
@@ -116,7 +106,6 @@
             </div>
         </div>
     </div>
-
     <!-- MAIN APP WRAPPER -->
     <div id="app" class="flex h-full overflow-hidden">
         <!-- SIDEBAR -->
@@ -147,7 +136,7 @@
                     <i class="fa-solid fa-graduation-cap w-5 text-center text-sm text-sky-400"></i> SPP & Tagihan Santri
                 </a>
                 <a href="#" onclick="switchTab('anggaran')" class="nav-btn flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-primary-700/60 transition-all" data-tab="anggaran">
-                    <i class="fa-solid fa-calculator w-5 text-center text-sm text-purple-400"></i> Anggaran RAPB
+                    <i class="fa-solid fa-calculator w-5 text-center text-sm text-purple-400"></i> Anggaran RAPBS
                 </a>
                 <a href="#" onclick="switchTab('laporan')" class="nav-btn flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-primary-700/60 transition-all" data-tab="laporan">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-sm text-indigo-400"></i> Laporan Keuangan
@@ -173,7 +162,6 @@
                 </div>
             </div>
         </aside>
-
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F8FAFC] dark:bg-slate-950">
             <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-6 z-20 glass-effect">
@@ -193,7 +181,6 @@
                     </button>
                 </div>
             </header>
-
             <!-- VIEW CANVAS -->
             <div id="view-canvas" class="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar space-y-6">
                 <!-- TAB 1: DASHBOARD -->
@@ -304,7 +291,7 @@
                             <table class="w-full text-left text-xs">
                                 <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-400 font-bold uppercase tracking-wider">
                                     <tr>
-                                        <th class="p-3.5">Tanggal & Hari</th>
+                                        <th class="p-3.5">Tanggal, Waktu & Hari</th>
                                         <th class="p-3.5">Jenis</th>
                                         <th class="p-3.5">Kategori / Keterangan</th>
                                         <th class="p-3.5">Unit</th>
@@ -317,7 +304,6 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- TAB 2: PEMASUKAN -->
                 <section id="tab-pemasukan" class="tab-content hidden space-y-6">
                     <div class="flex flex-wrap items-center justify-between gap-4">
@@ -356,7 +342,6 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- TAB 3: PENGELUARAN -->
                 <section id="tab-pengeluaran" class="tab-content hidden space-y-6">
                     <div class="flex flex-wrap items-center justify-between gap-4">
@@ -393,7 +378,6 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- TAB 4: KAS & REKENING -->
                 <section id="tab-kas" class="tab-content hidden space-y-6">
                     <div class="flex flex-wrap items-center justify-between gap-4">
@@ -431,7 +415,6 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- TAB 5: SPP & TAGIHAN SANTRI -->
                 <section id="tab-santri" class="tab-content hidden space-y-6">
                     <div class="flex flex-wrap items-center justify-between gap-4">
@@ -468,22 +451,20 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- TAB 6: ANGGARAN (RAPB) -->
+                <!-- TAB 6: ANGGARAN (RAPBS) -->
                 <section id="tab-anggaran" class="tab-content hidden space-y-6">
                     <div class="flex flex-wrap items-center justify-between gap-4">
                         <div>
-                            <h3 class="text-lg font-black text-slate-900 dark:text-white">Rencana Anggaran Pendapatan & Belanja (RAPB)</h3>
+                            <h3 class="text-lg font-black text-slate-900 dark:text-white">Rencana Anggaran Pendapatan & Belanja (RAPBS)</h3>
                             <p class="text-xs text-slate-500">Penyusunan limit batasan anggaran operasional & monitoring penyerapan dana.</p>
                         </div>
                         <button onclick="openModalAnggaran()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md flex items-center gap-2 transition">
-                            <i class="fa-solid fa-plus"></i> Tambah Anggaran RAPB
+                            <i class="fa-solid fa-plus"></i> Tambah Anggaran RAPBS
                         </button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="anggaran-cards-container">
                     </div>
                 </section>
-
                 <!-- TAB 7: LAPORAN KEUANGAN -->
                 <section id="tab-laporan" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 no-print">
@@ -585,7 +566,6 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- TAB 8: PENGATURAN SISTEM -->
                 <section id="tab-settings" class="tab-content hidden space-y-6">
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
@@ -598,12 +578,13 @@
                                 <p class="text-xs text-slate-500">Kelola unit pendidikan, identitas lembaga, logo resmi, foto profil admin, Kop Surat, Stempel, dan Tanda Tangan Digital.</p>
                             </div>
                         </div>
+                        <!-- FITUR KELOLA DAFTAR UNIT -->
                         <div class="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
                             <div class="flex justify-between items-center">
                                 <h4 class="font-extrabold text-sm text-primary-600 dark:text-accent-400"><i class="fa-solid fa-sitemap mr-1"></i> Kelola Daftar Unit Pendidikan / Unit Usaha</h4>
                             </div>
                             <div class="flex gap-2">
-                                <input type="text" id="new-unit-input" placeholder="Tulis nama unit baru..." class="flex-1 p-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold text-slate-900 dark:text-white">
+                                <input type="text" id="new-unit-input" placeholder="Tulis nama unit baru (misal: SMP Hidayatullah Panceng)..." class="flex-1 p-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-semibold text-slate-900 dark:text-white">
                                 <button type="button" onclick="addCustomUnit()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5"><i class="fa-solid fa-plus"></i> Tambah Unit</button>
                             </div>
                             <div class="pt-2">
@@ -769,16 +750,14 @@
             </div>
         </main>
     </div>
-
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
     <!-- MODAL VIEW BUKTI / STRUK -->
     <div id="modal-view-bukti" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
                 <h3 class="font-extrabold text-sm flex items-center gap-2 text-primary-600 dark:text-accent-400">
-                    <i class="fa-solid fa-image"></i> Detail Lampiran Bukti & Struk Transaksi
+                    <i class="fa-solid fa-image"></i> Detail Lampiran Bukti & Struk Transaksi HD
                 </h3>
                 <button onclick="closeModal('modal-view-bukti')" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
             </div>
@@ -788,7 +767,6 @@
             </div>
         </div>
     </div>
-
     <!-- MODAL CUSTOM CONFIRMATION -->
     <div id="modal-confirm" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 text-center">
@@ -803,7 +781,6 @@
             </div>
         </div>
     </div>
-
     <!-- MODAL PEMASUKAN -->
     <div id="modal-pemasukan" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 my-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
@@ -860,7 +837,7 @@
                     <input type="text" id="in-keterangan" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Unggah Struk / Bukti Transaksi</label>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Unggah Struk / Bukti Transaksi (HD Quality)</label>
                     <input type="file" id="in-files" multiple accept="image/*,.pdf" onchange="handleBuktiFiles(this, 'in')" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700">
                     <div id="in-bukti-preview" class="flex flex-wrap gap-2 mt-2"></div>
                 </div>
@@ -871,7 +848,6 @@
             </form>
         </div>
     </div>
-
     <!-- MODAL PENGELUARAN -->
     <div id="modal-pengeluaran" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 my-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
@@ -929,7 +905,7 @@
                     <input type="text" id="out-keterangan" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Unggah Struk / Bukti Pengeluaran</label>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Unggah Struk / Bukti Pengeluaran (HD Quality)</label>
                     <input type="file" id="out-files" multiple accept="image/*,.pdf" onchange="handleBuktiFiles(this, 'out')" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-700">
                     <div id="out-bukti-preview" class="flex flex-wrap gap-2 mt-2"></div>
                 </div>
@@ -940,7 +916,6 @@
             </form>
         </div>
     </div>
-
     <!-- MODAL TRANSFER ANTAR KAS -->
     <div id="modal-transfer" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
@@ -976,7 +951,6 @@
             </form>
         </div>
     </div>
-
     <!-- MODAL SANTRI -->
     <div id="modal-santri" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
@@ -1018,7 +992,7 @@
                     <input type="text" inputmode="numeric" id="santri-nominal" required placeholder="0" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold text-slate-900 dark:text-white">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Unggah Bukti Transfer (Opsional)</label>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Unggah Bukti Transfer HD (Opsional)</label>
                     <input type="file" id="santri-files" accept="image/*,.pdf" onchange="handleBuktiFiles(this, 'santri')" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-600 file:text-white hover:file:bg-sky-700">
                     <div id="santri-bukti-preview" class="flex flex-wrap gap-2 mt-2"></div>
                 </div>
@@ -1029,7 +1003,6 @@
             </form>
         </div>
     </div>
-
     <!-- MODAL KAS -->
     <div id="modal-kas" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
@@ -1067,20 +1040,19 @@
             </form>
         </div>
     </div>
-
-    <!-- MODAL ANGGARAN (RAPB) -->
+    <!-- MODAL ANGGARAN (RAPBS) -->
     <div id="modal-anggaran" class="fixed inset-0 z-50 hidden bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
                 <h3 id="modal-anggaran-title" class="font-extrabold text-sm flex items-center gap-2 text-purple-600">
-                    <i class="fa-solid fa-calculator"></i> Buat Anggaran RAPB Baru
+                    <i class="fa-solid fa-calculator"></i> Buat Anggaran RAPBS Baru
                 </h3>
                 <button onclick="closeModal('modal-anggaran')" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
             </div>
             <form onsubmit="saveAnggaran(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="anggaran-edit-id">
                 <div>
-                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Nama Program / Kegiatan RAPB</label>
+                    <label class="block font-bold mb-1 text-slate-700 dark:text-slate-300">Nama Program / Kegiatan RAPBS</label>
                     <input type="text" id="anggaran-program" required class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold">
                 </div>
                 <div>
@@ -1099,7 +1071,6 @@
             </form>
         </div>
     </div>
-
     <!-- JAVASCRIPT ENGINE -->
     <script>
         const FAVICON_OPSI_2 = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bgNavy' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%231E3A5F;stop-opacity:1'/><stop offset='100%25' style='stop-color:%230F172A;stop-opacity:1'/></linearGradient><linearGradient id='cyanGrad' x1='0%25' y1='0%25' x2='100%25' y2='0%25'><stop offset='0%25' style='stop-color:%2314B8A6;stop-opacity:1'/><stop offset='100%25' style='stop-color:%232DD4BF;stop-opacity:1'/></linearGradient></defs><rect width='512' height='512' rx='128' fill='url(%23bgNavy)'/><path d='M380 256 C380 330 320 390 246 390 C172 390 112 122 246 122 C210 150 190 200 190 256 C190 312 210 362 246 390 Z' fill='url(%23cyanGrad)' opacity='0.35'/><rect x='160' y='280' width='36' height='80' rx='18' fill='%232DD4BF'/><rect x='220' y='220' width='36' height='140' rx='18' fill='%232DD4BF'/><rect x='280' y='160' width='36' height='200' rx='18' fill='%232DD4BF'/><path d='M150 250 L260 150 L350 100' stroke='%23FFFFFF' stroke-width='24' stroke-linecap='round' stroke-linejoin='round' fill='none'/><polygon points='360,80 360,130 310,80' fill='%23FFFFFF'/></svg>";
@@ -1143,7 +1114,7 @@
         let tempBuktiFiles = [];
         let pendingConfirmCallback = null;
 
-        // BACA LOCAL STORAGE
+        // MEMBACA PENYIMPANAN LOKAL
         function loadAllFromLocalStorage() {
             try {
                 const usrData = localStorage.getItem('sikeu_user');
@@ -1168,36 +1139,82 @@
             }
         }
 
-        // SIMPAN DATA UTAMA & REKENING KE CLOUD
-        async function saveMasterToFirebase() {
+        // PENYIMPANAN DATA DENGAN PENGAMANAN LIMIT FIRESTORE 1MB & LOCALSTORAGE
+        async function saveToFirebase() {
             try {
-                localStorage.setItem('sikeu_settings', JSON.stringify(store.settings));
-                localStorage.setItem('sikeu_kas', JSON.stringify(store.kas));
-                localStorage.setItem('sikeu_transfer', JSON.stringify(store.transfer));
-                localStorage.setItem('sikeu_anggaran', JSON.stringify(store.anggaran));
+                store.settings.faviconUrl = FAVICON_OPSI_2;
+                
+                const safeSetItem = (key, value) => {
+                    try {
+                        localStorage.setItem(key, JSON.stringify(value));
+                    } catch (quotaError) {
+                        console.warn(`Quota localStorage penuh saat menyimpan ${key}.`);
+                    }
+                };
+
+                safeSetItem('sikeu_settings', store.settings);
+                safeSetItem('sikeu_kas', store.kas);
+                safeSetItem('sikeu_pemasukan', store.pemasukan);
+                safeSetItem('sikeu_pengeluaran', store.pengeluaran);
+                safeSetItem('sikeu_transfer', store.transfer);
+                safeSetItem('sikeu_santri', store.santri);
+                safeSetItem('sikeu_anggaran', store.anggaran);
 
                 if (window.db) {
-                    await window.fireSetDoc(window.fireDoc(window.db, "database_sikeu", "transaksi"), {
-                        kas: store.kas || [],
-                        transfer: store.transfer || [],
-                        anggaran: store.anggaran || [],
-                        settings: store.settings || {}
-                    });
+                    // Validasi ukuran payload untuk memastikan tidak menabrak batas 1 MB Firestore
+                    const prepareSafePayload = (arrayData) => {
+                        let jsonStr = JSON.stringify(arrayData);
+                        if (new Blob([jsonStr]).size > 950000) {
+                            // Jika melebihi batas 950KB, buang base64 struk yang terlalu berat di sync server
+                            // namun data lokal tetap aman
+                            return arrayData.map(item => {
+                                const copy = { ...item };
+                                if (copy.files && copy.files.length > 0) {
+                                    copy.files = copy.files.map(f => ({
+                                        name: f.name,
+                                        type: f.type,
+                                        dataUrl: f.dataUrl ? (f.dataUrl.length > 200000 ? "" : f.dataUrl) : ""
+                                    }));
+                                }
+                                return copy;
+                            });
+                        }
+                        return arrayData;
+                    };
+
+                    await Promise.all([
+                        window.fireSetDoc(window.fireDoc(window.db, "database_sikeu", "transaksi"), {
+                            kas: store.kas || [],
+                            transfer: store.transfer || [],
+                            anggaran: store.anggaran || [],
+                            settings: store.settings || {}
+                        }),
+                        window.fireSetDoc(window.fireDoc(window.db, "database_sikeu", "pemasukan_data"), {
+                            pemasukan: prepareSafePayload(store.pemasukan || [])
+                        }),
+                        window.fireSetDoc(window.fireDoc(window.db, "database_sikeu", "pengeluaran_data"), {
+                            pengeluaran: prepareSafePayload(store.pengeluaran || [])
+                        }),
+                        window.fireSetDoc(window.fireDoc(window.db, "database_sikeu", "santri_data"), {
+                            santri: prepareSafePayload(store.santri || [])
+                        })
+                    ]);
                 }
             } catch (err) {
-                console.error("Gagal simpan data master:", err);
+                console.error('Gagal menyimpan ke Firebase:', err);
+                showToast('Gagal sinkron cloud! Data disimpan di penyimpanan lokal.', 'error');
             }
         }
 
-        // SINKRONISASI REALTIME DENGAN SUB-COLLECTION (MENGATASI LIMIT 1MB & MENJAGA TANGGAL TERURUT)
+        // SINKRONISASI REALTIME TERPISAH (DENGAN PROTEKSI TIMPA DATA KOSONG)
         function initFirebaseSync() {
             if (!window.db) return;
-
-            // 1. Master & Kas Listener
+            
+            // Listener Dokumen Utama
             window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "transaksi"), (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (Array.isArray(data.kas)) store.kas = data.kas;
+                    if (Array.isArray(data.kas) && data.kas.length > 0) store.kas = data.kas;
                     if (Array.isArray(data.transfer)) store.transfer = data.transfer;
                     if (Array.isArray(data.anggaran)) store.anggaran = data.anggaran;
                     if (data.settings && typeof data.settings === 'object') store.settings = { ...store.settings, ...data.settings };
@@ -1205,61 +1222,39 @@
                 }
             });
 
-            // 2. Pengeluaran Listener (Mendukung Sub-Koleksi Satuan dan Dokumen Tunggal Lama)
-            window.fireOnSnapshot(window.fireCollection(window.db, "items_pengeluaran"), (snap) => {
-                if (!snap.empty) {
-                    const list = [];
-                    snap.forEach(d => list.push(d.data()));
-                    // URUTKAN BERDASARKAN TANGGAL TERBARU SECARA OTOMATIS
-                    store.pengeluaran = list.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                    localStorage.setItem('sikeu_pengeluaran', JSON.stringify(store.pengeluaran));
-                    refreshUI();
-                } else {
-                    // Cek fallback data lama jika sub-koleksi belum ada
-                    window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "pengeluaran_data"), (docSnap) => {
-                        if (docSnap.exists() && Array.isArray(docSnap.data().pengeluaran)) {
-                            store.pengeluaran = docSnap.data().pengeluaran.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                            refreshUI();
-                        }
-                    });
+            // Listener Pemasukan (Jangan timpa jika di Cloud kosong tapi di lokal ada data)
+            window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "pemasukan_data"), (docSnap) => {
+                if (docSnap.exists() && Array.isArray(docSnap.data().pemasukan)) {
+                    const cloudPem = docSnap.data().pemasukan;
+                    if (cloudPem.length >= store.pemasukan.length || store.pemasukan.length === 0) {
+                        store.pemasukan = cloudPem;
+                        localStorage.setItem('sikeu_pemasukan', JSON.stringify(store.pemasukan));
+                        refreshUI();
+                    }
                 }
             });
 
-            // 3. Pemasukan Listener (Mendukung Sub-Koleksi Satuan dan Dokumen Tunggal Lama)
-            window.fireOnSnapshot(window.fireCollection(window.db, "items_pemasukan"), (snap) => {
-                if (!snap.empty) {
-                    const list = [];
-                    snap.forEach(d => list.push(d.data()));
-                    // URUTKAN BERDASARKAN TANGGAL TERBARU SECARA OTOMATIS
-                    store.pemasukan = list.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                    localStorage.setItem('sikeu_pemasukan', JSON.stringify(store.pemasukan));
-                    refreshUI();
-                } else {
-                    // Cek fallback data lama jika sub-koleksi belum ada
-                    window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "pemasukan_data"), (docSnap) => {
-                        if (docSnap.exists() && Array.isArray(docSnap.data().pemasukan)) {
-                            store.pemasukan = docSnap.data().pemasukan.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                            refreshUI();
-                        }
-                    });
+            // Listener Pengeluaran (Jangan timpa jika di Cloud kosong tapi di lokal ada data)
+            window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "pengeluaran_data"), (docSnap) => {
+                if (docSnap.exists() && Array.isArray(docSnap.data().pengeluaran)) {
+                    const cloudPeng = docSnap.data().pengeluaran;
+                    if (cloudPeng.length >= store.pengeluaran.length || store.pengeluaran.length === 0) {
+                        store.pengeluaran = cloudPeng;
+                        localStorage.setItem('sikeu_pengeluaran', JSON.stringify(store.pengeluaran));
+                        refreshUI();
+                    }
                 }
             });
 
-            // 4. Santri Listener
-            window.fireOnSnapshot(window.fireCollection(window.db, "items_santri"), (snap) => {
-                if (!snap.empty) {
-                    const list = [];
-                    snap.forEach(d => list.push(d.data()));
-                    store.santri = list.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                    localStorage.setItem('sikeu_santri', JSON.stringify(store.santri));
-                    refreshUI();
-                } else {
-                    window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "santri_data"), (docSnap) => {
-                        if (docSnap.exists() && Array.isArray(docSnap.data().santri)) {
-                            store.santri = docSnap.data().santri.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                            refreshUI();
-                        }
-                    });
+            // Listener Santri
+            window.fireOnSnapshot(window.fireDoc(window.db, "database_sikeu", "santri_data"), (docSnap) => {
+                if (docSnap.exists() && Array.isArray(docSnap.data().santri)) {
+                    const cloudSan = docSnap.data().santri;
+                    if (cloudSan.length >= store.santri.length || store.santri.length === 0) {
+                        store.santri = cloudSan;
+                        localStorage.setItem('sikeu_santri', JSON.stringify(store.santri));
+                        refreshUI();
+                    }
                 }
             });
         }
@@ -1276,7 +1271,7 @@
             applySettingsUI();
         }
 
-        /* FUNGSI KOMPRESI GAMBAR STRUK (MAKS 600px & KUALITAS 0.50 AGAR SUPER RINGAN ~30KB) */
+        /* FUNGSI KOMPRESI GAMBAR OPTIMAL HD (1800px, 0.88 KUALITAS - TEKS STRUK TETAP TAJAM) */
         function compressImage(file, maxWidth, maxHeight, quality, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -1285,7 +1280,8 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    const maxDim = maxWidth || 600; 
+                    
+                    const maxDim = maxWidth || 1800; 
 
                     if (width > maxDim || height > maxDim) {
                         if (width > height) {
@@ -1303,7 +1299,8 @@
                     ctx.imageSmoothingQuality = 'high';
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    callback(canvas.toDataURL('image/jpeg', quality || 0.50));
+                    const targetQuality = quality || 0.88;
+                    callback(canvas.toDataURL('image/jpeg', targetQuality));
                 };
                 img.src = e.target.result;
             };
@@ -1323,9 +1320,7 @@
         }
 
         function getFormattedDateAndDay(dateInput) {
-            if (!dateInput) return { hariName: 'Senin', display: '-' };
-            const parts = dateInput.split('-');
-            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+            const d = dateInput ? new Date(dateInput) : new Date();
             const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
             const hariName = days[d.getDay()] || 'Senin';
@@ -1390,7 +1385,7 @@
             input.value = '';
             renderUnitSettingsTags();
             syncUnitDropdowns();
-            await saveMasterToFirebase();
+            await saveToFirebase();
             showToast('Unit berhasil ditambahkan!');
         }
 
@@ -1401,7 +1396,7 @@
                 store.settings.units[idx] = updated.trim();
                 renderUnitSettingsTags();
                 syncUnitDropdowns();
-                await saveMasterToFirebase();
+                await saveToFirebase();
                 showToast('Nama unit berhasil diperbarui!');
             }
         }
@@ -1411,7 +1406,7 @@
                 store.settings.units.splice(idx, 1);
                 renderUnitSettingsTags();
                 syncUnitDropdowns();
-                await saveMasterToFirebase();
+                await saveToFirebase();
                 showToast('Unit berhasil dihapus!');
             });
         }
@@ -1521,7 +1516,7 @@
 
         function previewStempelUpload(input) {
             if (input.files && input.files[0]) {
-                compressImage(input.files[0], 400, 400, 0.85, (compressedBase64) => {
+                compressImage(input.files[0], 600, 600, 0.92, (compressedBase64) => {
                     store.settings.stempelUrl = compressedBase64;
                     updateStempelDisplays();
                 });
@@ -1565,15 +1560,14 @@
         async function handleBuktiFiles(input, type) {
             const preview = document.getElementById(`${type}-bukti-preview`);
             if (!preview) return;
-            preview.innerHTML = '<span class="text-xs text-slate-400 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Mengompres struk...</span>';
+            preview.innerHTML = '<span class="text-xs text-slate-400 font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Memproses berkas HD...</span>';
             if (input.files && input.files.length > 0) {
                 tempBuktiFiles = [];
                 const filesArray = Array.from(input.files);
                 for (const file of filesArray) {
                     let dataUrl = "";
                     if (file.type.startsWith('image/')) {
-                        // Kompresi ringan agar ramah kuota Firestore
-                        dataUrl = await new Promise((resolve) => compressImage(file, 600, 600, 0.50, resolve));
+                        dataUrl = await new Promise((resolve) => compressImage(file, 1800, 1800, 0.88, resolve));
                     } else {
                         dataUrl = await new Promise((resolve) => {
                             const reader = new FileReader();
@@ -1587,7 +1581,7 @@
                 tempBuktiFiles.forEach(fileObj => {
                     const badge = document.createElement('div');
                     badge.className = 'text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-600 font-semibold flex items-center gap-1 text-slate-700 dark:text-slate-300';
-                    badge.innerHTML = `<i class="fa-solid ${fileObj.type === 'application/pdf' || fileObj.name.endsWith('.pdf') ? 'fa-file-pdf text-rose-500' : 'fa-image text-emerald-500'}"></i> ${fileObj.name.slice(0, 15)}`;
+                    badge.innerHTML = `<i class="fa-solid ${fileObj.type === 'application/pdf' || fileObj.name.endsWith('.pdf') ? 'fa-file-pdf text-rose-500' : 'fa-image text-emerald-500'}"></i> ${fileObj.name.slice(0, 15)} (HD)`;
                     preview.appendChild(badge);
                 });
             } else {
@@ -1616,7 +1610,7 @@
                     <div class="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
                         <div class="flex justify-between items-center font-bold text-slate-700 dark:text-slate-200">
                             <span class="truncate"><i class="fa-solid ${isPdf ? 'fa-file-pdf text-rose-500' : 'fa-paperclip text-slate-400'} mr-1.5"></i> ${name}</span>
-                            ${src ? `<a href="${src}" target="_blank" download="${name}" class="text-accent-600 dark:text-accent-400 hover:underline flex items-center gap-1 text-[11px]"><i class="fa-solid fa-download"></i> Unduh Berkas</a>` : ''}
+                            ${src ? `<a href="${src}" target="_blank" download="${name}" class="text-accent-600 dark:text-accent-400 hover:underline flex items-center gap-1 text-[11px]"><i class="fa-solid fa-download"></i> Unduh Berkas HD</a>` : ''}
                         </div>
                         ${src ? (
                             isPdf ? `
@@ -1625,7 +1619,7 @@
                                 </div>
                             ` : `
                                 <div class="rounded-xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-700 max-h-[75vh] flex items-center justify-center p-2">
-                                    <img src="${src}" class="max-h-[70vh] object-contain rounded-lg shadow-sm" alt="Bukti Struk">
+                                    <img src="${src}" class="max-h-[70vh] object-contain rounded-lg shadow-sm" alt="Bukti Struk HD">
                                 </div>
                             `
                         ) : `
@@ -1646,7 +1640,6 @@
             syncUnitDropdowns();
             document.getElementById('modal-pemasukan-title').innerHTML = '<i class="fa-solid fa-circle-arrow-down"></i> Catat Pemasukan Keuangan';
             document.getElementById('in-edit-id').value = '';
-            document.getElementById('in-tanggal').value = new Date().toISOString().split('T')[0];
             document.getElementById('in-pembayar').value = '';
             document.getElementById('in-nominal').value = '';
             document.getElementById('in-keterangan').value = '';
@@ -1661,7 +1654,6 @@
             syncUnitDropdowns();
             document.getElementById('modal-pengeluaran-title').innerHTML = '<i class="fa-solid fa-circle-arrow-up"></i> Catat Pengeluaran Keuangan';
             document.getElementById('out-edit-id').value = '';
-            document.getElementById('out-tanggal').value = new Date().toISOString().split('T')[0];
             document.getElementById('out-penerima').value = '';
             document.getElementById('out-nominal').value = '';
             document.getElementById('out-keterangan').value = '';
@@ -1702,15 +1694,9 @@
         }
         function closeModal(id) { const modal = document.getElementById(id); if (modal) modal.classList.add('hidden'); }
 
-        // TABEL PEMASUKAN DENGAN SORTING OTOMATIS TANGGAL TERBARU
         function renderPemasukanTable() {
             const search = (document.getElementById('search-pemasukan')?.value || '').toLowerCase();
-            let data = [...store.pemasukan]
-                .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
-                .filter(i => (i.pembayar || '').toLowerCase().includes(search) || 
-                             (i.kategori || '').toLowerCase().includes(search) || 
-                             (i.ket || '').toLowerCase().includes(search));
-
+            let data = store.pemasukan.filter(i => (i.pembayar || '').toLowerCase().includes(search) || (i.kategori || '').toLowerCase().includes(search) || (i.ket || '').toLowerCase().includes(search));
             const countEl = document.getElementById('count-pemasukan');
             if (countEl) countEl.innerText = `Total: ${data.length} Transaksi`;
             const tbody = document.getElementById('table-pemasukan-body');
@@ -1775,14 +1761,7 @@
                     if (targetKas) targetKas.saldo = Math.max(0, targetKas.saldo - item.nominal);
                 }
                 store.pemasukan = store.pemasukan.filter(i => i.id !== id);
-                localStorage.setItem('sikeu_pemasukan', JSON.stringify(store.pemasukan));
-                
-                if (window.db) {
-                    try {
-                        await window.fireDeleteDoc(window.fireDoc(window.db, "items_pemasukan", id));
-                    } catch (e) { console.warn(e); }
-                }
-                await saveMasterToFirebase();
+                await saveToFirebase();
                 populateYearDropdowns();
                 showToast('Transaksi pemasukan berhasil dihapus');
                 renderPemasukanTable();
@@ -1801,64 +1780,50 @@
             const kas = document.getElementById('in-kas').value;
             let katSelect = document.getElementById('in-kategori').value;
             if (katSelect === 'Kategori Lainnya') katSelect = document.getElementById('in-kategori-custom').value || 'Pemasukan Lainnya';
-
-            const itemObj = {
-                id: editId || ('IN-' + Date.now()),
-                tanggal: tgl,
-                hari: getFormattedDateAndDay(tgl).hariName,
-                kategori: katSelect,
-                unit, pembayar, kas, nominal, ket,
-                files: tempBuktiFiles.length > 0 ? tempBuktiFiles : []
-            };
-
+            
             if (editId) {
                 const idx = store.pemasukan.findIndex(i => i.id === editId);
                 if (idx !== -1) {
                     const oldItem = store.pemasukan[idx];
                     const oldKas = store.kas.find(k => k.name === oldItem.kas);
                     if (oldKas) oldKas.saldo -= oldItem.nominal;
-                    itemObj.files = tempBuktiFiles.length > 0 ? tempBuktiFiles : (oldItem.files || []);
-                    store.pemasukan[idx] = itemObj;
+                    store.pemasukan[idx] = {
+                        ...oldItem,
+                        tanggal: tgl,
+                        hari: getFormattedDateAndDay(tgl).hariName,
+                        kategori: katSelect,
+                        unit, pembayar, kas, nominal, ket,
+                        files: tempBuktiFiles.length > 0 ? tempBuktiFiles : (oldItem.files || [])
+                    };
                     const newKas = store.kas.find(k => k.name === kas);
                     if (newKas) newKas.saldo += nominal;
+                    showToast('Transaksi pemasukan berhasil diperbarui!');
                 }
             } else {
-                store.pemasukan.push(itemObj);
+                const newObj = {
+                    id: 'IN-' + String(Date.now()).slice(-4),
+                    tanggal: tgl,
+                    hari: getFormattedDateAndDay(tgl).hariName,
+                    kategori: katSelect,
+                    unit, pembayar, kas, nominal, ket,
+                    files: tempBuktiFiles.length > 0 ? tempBuktiFiles : []
+                };
+                store.pemasukan.unshift(newObj);
                 const targetKas = store.kas.find(k => k.name === kas);
                 if (targetKas) targetKas.saldo = (Number(targetKas.saldo) || 0) + nominal;
+                showToast('Transaksi pemasukan berhasil disimpan!');
             }
-
-            // Urutkan array data secara langsung
-            store.pemasukan.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-            localStorage.setItem('sikeu_pemasukan', JSON.stringify(store.pemasukan));
-
-            // Simpan satuan ke Firestore sub-koleksi
-            if (window.db) {
-                try {
-                    await window.fireSetDoc(window.fireDoc(window.db, "items_pemasukan", itemObj.id), itemObj);
-                } catch (err) {
-                    console.error("Gagal simpan item ke cloud:", err);
-                }
-            }
-            await saveMasterToFirebase();
-
-            showToast('Transaksi pemasukan berhasil disimpan!');
             tempBuktiFiles = [];
+            await saveToFirebase();
             populateYearDropdowns();
             closeModal('modal-pemasukan');
             renderPemasukanTable();
             renderDashboard();
         }
 
-        // TABEL PENGELUARAN DENGAN SORTING OTOMATIS TANGGAL TERBARU
         function renderPengeluaranTable() {
             const search = (document.getElementById('search-pengeluaran')?.value || '').toLowerCase();
-            let data = [...store.pengeluaran]
-                .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
-                .filter(o => (o.penerima || '').toLowerCase().includes(search) || 
-                             (o.kategori || '').toLowerCase().includes(search) || 
-                             (o.ket || '').toLowerCase().includes(search));
-
+            let data = store.pengeluaran.filter(o => (o.penerima || '').toLowerCase().includes(search) || (o.kategori || '').toLowerCase().includes(search) || (o.ket || '').toLowerCase().includes(search));
             const countEl = document.getElementById('count-pengeluaran');
             if (countEl) countEl.innerText = `Total: ${data.length} Transaksi`;
             const tbody = document.getElementById('table-pengeluaran-body');
@@ -1923,14 +1888,7 @@
                     if (targetKas) targetKas.saldo += item.nominal;
                 }
                 store.pengeluaran = store.pengeluaran.filter(o => o.id !== id);
-                localStorage.setItem('sikeu_pengeluaran', JSON.stringify(store.pengeluaran));
-                
-                if (window.db) {
-                    try {
-                        await window.fireDeleteDoc(window.fireDoc(window.db, "items_pengeluaran", id));
-                    } catch (e) { console.warn(e); }
-                }
-                await saveMasterToFirebase();
+                await saveToFirebase();
                 populateYearDropdowns();
                 showToast('Transaksi pengeluaran berhasil dihapus');
                 renderPengeluaranTable();
@@ -1949,64 +1907,50 @@
             const kas = document.getElementById('out-kas').value;
             let katSelect = document.getElementById('out-kategori').value;
             if (katSelect === 'Kategori Lainnya') katSelect = document.getElementById('out-kategori-custom').value || 'Pengeluaran Lainnya';
-
-            const itemObj = {
-                id: editId || ('OUT-' + Date.now()),
-                tanggal: tgl,
-                hari: getFormattedDateAndDay(tgl).hariName,
-                kategori: katSelect,
-                unit, penerima, kas, nominal, ket,
-                files: tempBuktiFiles.length > 0 ? tempBuktiFiles : []
-            };
-
+            
             if (editId) {
                 const idx = store.pengeluaran.findIndex(o => o.id === editId);
                 if (idx !== -1) {
                     const oldItem = store.pengeluaran[idx];
                     const oldKas = store.kas.find(k => k.name === oldItem.kas);
                     if (oldKas) oldKas.saldo += oldItem.nominal;
-                    itemObj.files = tempBuktiFiles.length > 0 ? tempBuktiFiles : (oldItem.files || []);
-                    store.pengeluaran[idx] = itemObj;
+                    store.pengeluaran[idx] = {
+                        ...oldItem,
+                        tanggal: tgl,
+                        hari: getFormattedDateAndDay(tgl).hariName,
+                        kategori: katSelect,
+                        unit, penerima, kas, nominal, ket,
+                        files: tempBuktiFiles.length > 0 ? tempBuktiFiles : (oldItem.files || [])
+                    };
                     const newKas = store.kas.find(k => k.name === kas);
                     if (newKas) newKas.saldo = Math.max(0, newKas.saldo - nominal);
+                    showToast('Transaksi pengeluaran berhasil diperbarui!');
                 }
             } else {
-                store.pengeluaran.push(itemObj);
+                const newObj = {
+                    id: 'OUT-' + String(Date.now()).slice(-4),
+                    tanggal: tgl,
+                    hari: getFormattedDateAndDay(tgl).hariName,
+                    kategori: katSelect,
+                    unit, penerima, kas, nominal, ket,
+                    files: tempBuktiFiles.length > 0 ? tempBuktiFiles : []
+                };
+                store.pengeluaran.unshift(newObj);
                 const targetKas = store.kas.find(k => k.name === kas);
                 if (targetKas) targetKas.saldo = Math.max(0, (Number(targetKas.saldo) || 0) - nominal);
+                showToast('Transaksi pengeluaran berhasil disimpan!');
             }
-
-            // Urutkan array secara langsung
-            store.pengeluaran.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-            localStorage.setItem('sikeu_pengeluaran', JSON.stringify(store.pengeluaran));
-
-            // Simpan satuan ke Firestore sub-koleksi
-            if (window.db) {
-                try {
-                    await window.fireSetDoc(window.fireDoc(window.db, "items_pengeluaran", itemObj.id), itemObj);
-                } catch (err) {
-                    console.error("Gagal simpan item ke cloud:", err);
-                }
-            }
-            await saveMasterToFirebase();
-
-            showToast('Transaksi pengeluaran berhasil disimpan!');
             tempBuktiFiles = [];
+            await saveToFirebase();
             populateYearDropdowns();
             closeModal('modal-pengeluaran');
             renderPengeluaranTable();
             renderDashboard();
         }
 
-        // TABEL SANTRI DENGAN SORTING OTOMATIS TANGGAL TERBARU
         function renderSantriTable() {
             const search = (document.getElementById('search-santri')?.value || '').toLowerCase();
-            let data = [...store.santri]
-                .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
-                .filter(s => (s.nama || '').toLowerCase().includes(search) || 
-                             (s.nis || '').toLowerCase().includes(search) || 
-                             (s.kelas || '').toLowerCase().includes(search));
-
+            let data = store.santri.filter(s => (s.nama || '').toLowerCase().includes(search) || (s.nis || '').toLowerCase().includes(search) || (s.kelas || '').toLowerCase().includes(search));
             const tbody = document.getElementById('table-santri-body');
             if (!tbody) return;
             if (data.length === 0) {
@@ -2060,12 +2004,7 @@
         async function deleteSantri(id) {
             askConfirmation('Hapus Tagihan Santri', 'Apakah Anda yakin ingin menghapus data tagihan santri ini?', async () => {
                 store.santri = store.santri.filter(s => s.id !== id);
-                localStorage.setItem('sikeu_santri', JSON.stringify(store.santri));
-                if (window.db) {
-                    try {
-                        await window.fireDeleteDoc(window.fireDoc(window.db, "items_santri", id));
-                    } catch (e) { console.warn(e); }
-                }
+                await saveToFirebase();
                 showToast('Data tagihan santri berhasil dihapus');
                 renderSantriTable();
             });
@@ -2081,37 +2020,31 @@
             const kelas = document.getElementById('santri-kelas').value;
             const tagihan = document.getElementById('santri-tagihan').value;
             const nominal = parseNominal(document.getElementById('santri-nominal').value);
-
-            const itemObj = {
-                id: editId || ('SNT-' + Date.now()),
-                tanggal: tgl,
-                nis, nama, unit, kelas, tagihan, nominal,
-                lunas: false,
-                files: tempBuktiFiles.length > 0 ? tempBuktiFiles : []
-            };
-
+            
             if (editId) {
                 const idx = store.santri.findIndex(s => s.id === editId);
                 if (idx !== -1) {
-                    itemObj.lunas = store.santri[idx].lunas;
-                    itemObj.files = tempBuktiFiles.length > 0 ? [...tempBuktiFiles] : store.santri[idx].files;
-                    store.santri[idx] = itemObj;
+                    store.santri[idx] = {
+                        ...store.santri[idx],
+                        tanggal: tgl,
+                        nis, nama, unit, kelas, tagihan, nominal,
+                        files: tempBuktiFiles.length > 0 ? [...tempBuktiFiles] : store.santri[idx].files
+                    };
+                    showToast('Data tagihan santri berhasil diperbarui!');
                 }
             } else {
-                store.santri.push(itemObj);
+                const newObj = {
+                    id: 'SNT-' + Date.now(),
+                    tanggal: tgl,
+                    nis, nama, unit, kelas, tagihan, nominal,
+                    lunas: false,
+                    files: [...tempBuktiFiles]
+                };
+                store.santri.unshift(newObj);
+                showToast('Data Tagihan Santri berhasil ditambahkan!');
             }
-
-            store.santri.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-            localStorage.setItem('sikeu_santri', JSON.stringify(store.santri));
-
-            if (window.db) {
-                try {
-                    await window.fireSetDoc(window.fireDoc(window.db, "items_santri", itemObj.id), itemObj);
-                } catch (e) { console.warn(e); }
-            }
-
-            showToast('Data Tagihan Santri berhasil disimpan!');
             tempBuktiFiles = [];
+            await saveToFirebase();
             closeModal('modal-santri');
             renderSantriTable();
         }
@@ -2171,13 +2104,10 @@
             if (outEl) outEl.innerText = formatRp(totalKeluar);
             const surplusEl = document.getElementById('dash-surplus');
             if (surplusEl) surplusEl.innerText = formatRp(surplus);
-            
-            // 5 Transaksi Paling Terkini
             const allTrx = [
                 ...filteredIn.map(x => ({ ...x, type: 'IN' })),
                 ...filteredOut.map(x => ({ ...x, type: 'OUT' }))
             ].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal)).slice(0, 5);
-
             const recentTable = document.getElementById('dash-recent-table');
             if (recentTable) {
                 if (allTrx.length === 0) {
@@ -2282,7 +2212,7 @@
                 store.kas.push(newKas);
                 showToast('Akun Kas baru berhasil ditambahkan!');
             }
-            await saveMasterToFirebase();
+            await saveToFirebase();
             closeModal('modal-kas');
             updateKasSelectOptions();
             renderKasCards();
@@ -2304,7 +2234,7 @@
         async function deleteKas(id) {
             askConfirmation('Hapus Akun Kas', 'Yakin ingin menghapus akun kas ini?', async () => {
                 store.kas = store.kas.filter(k => k.id !== id);
-                await saveMasterToFirebase();
+                await saveToFirebase();
                 showToast('Akun kas berhasil dihapus');
                 updateKasSelectOptions();
                 renderKasCards();
@@ -2315,15 +2245,15 @@
         async function saveTransfer(e) {
             if (e) e.preventDefault();
             const sumber = document.getElementById('tr-sumber').value;
-            const target = document.getElementById('tr-tujuan').value;
+            const目的 = document.getElementById('tr-tujuan').value;
             const nominal = parseNominal(document.getElementById('tr-nominal').value);
             const ket = document.getElementById('tr-keterangan').value;
-            if (sumber === target) {
+            if (sumber === 目的) {
                 showToast('Kas asal dan tujuan tidak boleh sama!', 'error');
                 return;
             }
             const kasSumber = store.kas.find(k => k.name === sumber);
-            const kasTujuan = store.kas.find(k => k.name === target);
+            const kasTujuan = store.kas.find(k => k.name === 目的);
             if (kasSumber && (kasSumber.saldo || 0) < nominal) {
                 showToast('Saldo Kas Asal tidak mencukupi!', 'error');
                 return;
@@ -2333,11 +2263,11 @@
             store.transfer.unshift({
                 tanggal: new Date().toISOString().split('T')[0],
                 dari: sumber,
-                ke: target,
+                ke: 目的,
                 nominal: nominal,
                 ket: ket
             });
-            await saveMasterToFirebase();
+            await saveToFirebase();
             showToast('Transfer dana berhasil diproses!');
             closeModal('modal-transfer');
             renderKasCards();
@@ -2350,8 +2280,8 @@
             askConfirmation('Konfirmasi Pembayaran SPP', `Proses pelunasan SPP untuk ${item.nama}?`, async () => {
                 item.lunas = true;
                 const defaultKas = store.kas[0]?.name || 'Kas Tunai';
-                const pemObj = {
-                    id: 'IN-' + Date.now(),
+                store.pemasukan.unshift({
+                    id: 'IN-' + String(Date.now()).slice(-4),
                     tanggal: item.tanggal || new Date().toISOString().split('T')[0],
                     hari: getFormattedDateAndDay(item.tanggal).hariName,
                     kategori: 'SPP/Infak Wali Santri',
@@ -2361,20 +2291,10 @@
                     nominal: item.nominal,
                     ket: item.tagihan,
                     files: item.files || []
-                };
-                store.pemasukan.push(pemObj);
-                store.pemasukan.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                
+                });
                 const targetKas = store.kas.find(k => k.name === defaultKas);
                 if (targetKas) targetKas.saldo += item.nominal;
-
-                if (window.db) {
-                    try {
-                        await window.fireSetDoc(window.fireDoc(window.db, "items_pemasukan", pemObj.id), pemObj);
-                        await window.fireSetDoc(window.fireDoc(window.db, "items_santri", item.id), item);
-                    } catch (e) { console.warn(e); }
-                }
-                await saveMasterToFirebase();
+                await saveToFirebase();
                 populateYearDropdowns();
                 showToast('Pembayaran SPP berhasil dicatat!');
                 renderSantriTable();
@@ -2386,7 +2306,7 @@
             const container = document.getElementById('anggaran-cards-container');
             if (!container) return;
             if (!store.anggaran || store.anggaran.length === 0) {
-                container.innerHTML = `<div class="col-span-2 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-slate-400 font-normal">Belum ada anggaran RAPB yang dibuat. Silakan klik Tambah Anggaran.</div>`;
+                container.innerHTML = `<div class="col-span-2 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-slate-400 font-normal">Belum ada anggaran RAPBS yang dibuat. Silakan klik Tambah Anggaran.</div>`;
                 return;
             }
             container.innerHTML = store.anggaran.map(a => {
@@ -2419,13 +2339,12 @@
             const unit = document.getElementById('anggaran-unit').value;
             const plafon = parseNominal(document.getElementById('anggaran-plafon').value);
             store.anggaran.push({ id: 'ANG-' + Date.now(), program, unit, plafon, terpakai: 0 });
-            await saveMasterToFirebase();
-            showToast('Anggaran RAPB baru berhasil ditambahkan!');
+            await saveToFirebase();
+            showToast('Anggaran RAPBS baru berhasil ditambahkan!');
             closeModal('modal-anggaran');
             renderAnggaranCards();
         }
 
-        // LAPORAN KEUANGAN DENGAN SORTING KRONOLOGIS URUT TANGGAL (1 - 31)
         function generateReport() {
             const output = document.getElementById('lap-output-container');
             if (!output) return;
@@ -2438,11 +2357,8 @@
             const tahunLabel = thnFilter === 'semua' ? 'Semua Tahun' : `Tahun ${thnFilter}`;
             const subt = document.getElementById('lap-preview-subtitle');
             if (subt) subt.innerText = `Periode ${bulanLabel} ${tahunLabel} - ${unitFilter === 'semua' ? 'Semua Unit' : unitFilter}`;
-            
-            // Urutkan data secara kronologis (dari awal bulan ke akhir bulan)
-            let filteredIn = [...store.pemasukan].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
-            let filteredOut = [...store.pengeluaran].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
-            
+            let filteredIn = [...store.pemasukan];
+            let filteredOut = [...store.pengeluaran];
             if (unitFilter !== 'semua') {
                 filteredIn = filteredIn.filter(i => i.unit === unitFilter);
                 filteredOut = filteredOut.filter(o => o.unit === unitFilter);
@@ -2636,7 +2552,7 @@
 
         function previewLogoUpload(input) {
             if (input.files && input.files[0]) {
-                compressImage(input.files[0], 400, 400, 0.85, (compressedBase64) => {
+                compressImage(input.files[0], 600, 600, 0.92, (compressedBase64) => {
                     store.settings.logoUrl = compressedBase64;
                     updateLogoDisplays(store.settings.logoUrl, store.settings.appIcon);
                 });
@@ -2646,7 +2562,7 @@
 
         function previewAdminAvatarUpload(input) {
             if (input.files && input.files[0]) {
-                compressImage(input.files[0], 300, 300, 0.85, (compressedBase64) => {
+                compressImage(input.files[0], 400, 400, 0.92, (compressedBase64) => {
                     store.settings.adminAvatarUrl = compressedBase64;
                     updateUserAvatarBadge();
                 });
@@ -2678,7 +2594,7 @@
 
         function previewKopBannerUpload(input) {
             if (input.files && input.files[0]) {
-                compressImage(input.files[0], 1200, 300, 0.85, (compressedBase64) => {
+                compressImage(input.files[0], 1920, 400, 0.92, (compressedBase64) => {
                     store.settings.kopBannerUrl = compressedBase64;
                     updateKopDisplays();
                 });
@@ -2696,7 +2612,7 @@
 
         function previewTTD1Upload(input) {
             if (input.files && input.files[0]) {
-                compressImage(input.files[0], 400, 200, 0.85, (compressedBase64) => {
+                compressImage(input.files[0], 600, 300, 0.92, (compressedBase64) => {
                     store.settings.ttd1Url = compressedBase64;
                     updateTTDDisplays();
                 });
@@ -2714,7 +2630,7 @@
 
         function previewTTD2Upload(input) {
             if (input.files && input.files[0]) {
-                compressImage(input.files[0], 400, 200, 0.85, (compressedBase64) => {
+                compressImage(input.files[0], 600, 300, 0.92, (compressedBase64) => {
                     store.settings.ttd2Url = compressedBase64;
                     updateTTDDisplays();
                 });
@@ -2803,7 +2719,7 @@
             store.settings.jabatanKetua = document.getElementById('set-jabatan-ketua').value;
             store.settings.bendaharaYayasan = document.getElementById('set-bendahara').value;
             store.settings.jabatanBendahara = document.getElementById('set-jabatan-bendahara').value;
-            await saveMasterToFirebase();
+            await saveToFirebase();
             showToast('Pengaturan Sistem Berhasil Disimpan!');
             applySettingsUI();
             updateUserAvatarBadge();
@@ -2827,7 +2743,7 @@
                 pengeluaran: 'Pengeluaran Keuangan',
                 kas: 'Pengelolaan Kas & Rekening Bank',
                 santri: 'SPP & Tagihan Santri',
-                anggaran: 'Rencana Anggaran Pendapatan & Belanja (RAPB)',
+                anggaran: 'Rencana Anggaran Pendapatan & Belanja (RAPBS)',
                 laporan: 'Laporan Keuangan Yayasan',
                 settings: 'Pengaturan Sistem'
             };
@@ -2954,7 +2870,7 @@
         function initClock() {
             const updateTime = () => {
                 const now = new Date();
-                const dateObj = getFormattedDateAndDay(now.toISOString().split('T')[0]);
+                const dateObj = getFormattedDateAndDay(now);
                 const timeStr = now.toLocaleTimeString('id-ID');
                 const clockEl = document.getElementById('clock-display');
                 if (clockEl) clockEl.innerText = `${dateObj.display} - ${timeStr} WIB`;
